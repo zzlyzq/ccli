@@ -5,7 +5,7 @@ import shutil
 import time
 import os
 
-class s27:
+class s2752:
 	def __init__(self,ip,username,password):
 		self.ip = ip 
 		self.username = username
@@ -14,6 +14,7 @@ class s27:
 		self.version = ""
 		self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*','\[[\w\-]+\].*','---- More ----.*','closed.*','asdf234234sdfsdf','asdfasdf234sdf','pexpect.EOF', 'pexect.TIMEOUT.' ]
 		self.pexpect1 = pexpect.spawn("ssh %s@%s"%(self.username,self.ip),timeout=self.timewait)
+
 	def conn(self):
 		#print "START CONN"
 		backData1 = self.pexpect1.expect(self.expectData1)
@@ -39,6 +40,7 @@ class s27:
 		else:
 			print "Error"
 			return 0
+
 	def getiplist(self):	
 		print "START GET IP LIST"
 		self.pexpect1.sendline("dis ip interface brief")
@@ -51,56 +53,72 @@ class s27:
 
 	def getconfig(self):
 		#print "START GETCONFIG"
-		self.pexpect1.sendline("display current-configuration")
-		conffile = "./config/%s.txt"%(self.ip)
-		conffilehandle = open(conffile,'w')
-		while 1:
-			backUserData1 = self.pexpect1.expect(self.expectData1)
-			conffilehandle.write(self.pexpect1.before)
-			conffilehandle.write(self.pexpect1.after)
-			if backUserData1 == 2:
-				conffilehandle.close()
-				self.cleanfile(conffile)
-				self.cleanfilemore(conffile)
-				self.formatfile(conffile)
-				print self.ip, "SAVED TO > ",conffile
-				return 1
-			elif backUserData1 == 4:
-				self.pexpect1.sendline(" ")
-			else:
-				print "Error"
-				return 0
+		type = "getconfig"
+		cmd = "display current-configuration"
+		resultfile = self.exe(type, cmd)
+
+
+        def getmaclist(self):
+                #print "START GET MAC LIST"
+                type = "getmaclist"
+                cmd = "display mac-address"
+                resultfile = self.exe(type,cmd)
+                #resultfile = "./getmaclist/172.20.3.201.txt"
+                for line in open(resultfile):
+                        lineparts = re.findall("(\S+)+",line)
+                        #print lineparts
+                        if len(lineparts) == 7:
+                                portindex = re.findall("(Eth0\/0\/)(\d+)",lineparts[4])
+                                #print "AAA", portindex
+                                if len(portindex) == 1:
+                                        if len(portindex[0]) == 2:
+                                                #print portindex
+                                                if int(portindex[0][1]) <= 47:
+                                                        print lineparts[0],lineparts[1], self.ip, lineparts[4]
+                                                else:
+                                                        pass
+                                        else:
+                                                pass
+                                else:
+                                        pass
+                        else:
+                                pass
+
+        def exe(self,type,cmd):
+                recvdata = ""
+                self.pexpect1.sendline("%s"%cmd)
+                while 1:
+                        backUserData1 = self.pexpect1.expect(self.expectData1)
+                        if backUserData1 == 2:
+                                recvdata += self.pexpect1.before
+                                recvdata += self.pexpect1.after
+                                break
+                        elif backUserData1 == 4:
+                                recvdata +=self.pexpect1.before
+                                recvdata +=self.pexpect1.after
+                                self.pexpect1.send(" ")
+                        else:
+                                print backUserData1
+                                print "Error A"
+                                return 0
+                resultfile = "./%s/%s.txt"%(type, self.ip)
+                resultfilehandle = open(resultfile,'w')
+                resultfilehandle.write(recvdata)
+                resultfilehandle.close()
+                self.cleanfile(resultfile)
+                self.cleanfilemore(resultfile)
+                self.formatfile(resultfile)
+                print "RESULT SAVED TO > %s"%resultfile
+                return resultfile
 
 	
 	def getportfree(self):
-		#print "START GET PORT FREE"
-		# "dis interface brief"
-                conffile = "./getportfree/%s.txt"%(self.ip)
-                conffilehandle = open(conffile,'w')
-		self.pexpect1.sendline("dis interface brief")
-		while 1:
-			backUserData1 = self.pexpect1.expect(self.expectData1)
-			#print self.pexpect1.before
-			conffilehandle.write(self.pexpect1.before)
-			conffilehandle.write(self.pexpect1.after)
-			if backUserData1 == 2:
-				#print "END"
-				conffilehandle.close()
-				self.cleanfile(conffile)
-				self.cleanfilemore(conffile)
-				self.formatfile(conffile)
-				self.findportfree(conffile)
-				return 1
-			elif backUserData1 == 4:
-				self.pexpect1.sendline(" ")
-			else:
-				print "Error"
-
-	def findportfree(self,filename):
+		type = "getportfree"
+		cmd = "dis interface brief"
+		resultfile = self.exe(type, cmd)
 	        number = 0
-	        file = filename
-	        for line in open(file):
-	                lineparts = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+	        for line in open(resultfile):
+	                lineparts = re.findall(r"(\S+)+",line)
 	                #print lineparts
 	                if len(lineparts):
 	                        portinfo = re.findall('^(Ethernet0\/0\/)(\d+) +([updown]+)',line)
@@ -136,7 +154,6 @@ class s27:
                 temp = tempfile.TemporaryFile()
                 temphandle = open(temp.name,'w')
                 for line in open(filename):
-                        #linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
                         linepart = re.findall(r"([\S]+)",line)
                         if len(linepart) == 0:
                                 continue
