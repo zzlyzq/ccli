@@ -158,25 +158,6 @@ class s16:
 				return 0
 		print self.ip, "PORT ETA", number
 			
-	def findportfree(self,filename):
-	        number = 0
-	        file = filename
-	        for line in open(file):
-	                lineparts = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
-	                #print lineparts
-	                if len(lineparts):
-	                        portinfo = re.findall('^(GE1\/0\/)(\d+) ([UPDOWN]+)',line)
-	                        if len(portinfo) == 1:
-	                                portsubs = portinfo[0]
-	                                portpart1 = portsubs[0]
-	                                portpart2 = portsubs[1]
-	                                portstatus = portsubs[2]
-	                                if int(portpart2) <= 48:
-	                                        if portstatus == "DOWN":
-	                                                number += 1
-		print self.ip, "PORT ETA: ", number
-	        return number
-
         def formatfile(self,filename):
                 temp = tempfile.TemporaryFile()
                 temphandle = open(temp.name,'w')
@@ -239,17 +220,3 @@ class s16:
 		backUserData1 = self.pexpect1.expect(self.expectData1)
 		#print "AAAA",backUserData1,"AAAA"
 	
-
-username = "admin"
-password = "admin"
-#username = "yourusername"
-#password = "yourpassword"
-
-ip = "172.22.3.171"
-test = s16(ip,username,password)
-test.conn()
-#test.getconfig()
-#test.getportfree()
-#test.getmaclist()
-test.getversion()
-test.quit()

@@ -194,15 +194,3 @@ class s27:
 		backUserData1 = self.pexpect1.expect(self.expectData1)
 		#print "AAAA",backUserData1,"AAAA"
 	
-
-username = "yourusername"
-password = "yourpassword"
-
-ip = "172.22.3.168"
-test = s27(ip,username,password)
-test.conn()
-#test.getconfig()
-#test.getportfree()
-test.getversion()
-test.quit()
-

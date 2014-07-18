@@ -227,16 +227,3 @@ class ex:
 		backUserData1 = self.pexpect1.expect(self.expectData1)
 		#print "AAAA",backUserData1,"AAAA"
 	
-
-username = "yourusername"
-password = "yourpassword"
-ip = "172.20.4.48"
-
-test = ex(ip,username,password)
-test.conn()
-#test.getconfig()
-#test.getportfree()
-test.getversion()
-#test.getiplist()
-#test.getmaclist()
-test.quit()

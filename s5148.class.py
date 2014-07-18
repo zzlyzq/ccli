@@ -206,16 +206,3 @@ class s5148:
 		backUserData1 = self.pexpect1.expect(self.expectData1)
 		#print "AAAA",backUserData1,"AAAA"
 	
-
-username = "yourusername"
-password = "yourpassword"
-ip = "172.20.3.201"
-
-test = s5148(ip,username,password)
-test.conn()
-#test.getconfig()
-#test.getportfree()
-#test.getversion()
-#test.getmaclist()
-test.quit()
-

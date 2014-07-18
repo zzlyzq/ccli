@@ -231,14 +231,3 @@ class s5352:
 		#print "AAAA",backUserData1,"AAAA"
 	
 
-username = "yourusername"
-password = "yourpassword"
-ip = "172.20.3.182"
-
-test = s5352(ip,username,password)
-test.conn()
-#test.getconfig()
-#test.getportfree()
-#test.getversion()
-#test.getmaclist()
-test.quit()

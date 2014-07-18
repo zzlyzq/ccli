@@ -199,19 +199,3 @@ class dell3548:
 		backUserData1 = self.pexpect1.expect(self.expectData1)
 		#print "AAAA",backUserData1,"AAAA"
 	
-
-#username = "admin"
-#password = "admin"
-username = "yourusername"
-password = "yourpassword"
-
-ip = "172.22.3.227"
-test = dell3548(ip,username,password)
-test.conn()
-#test.getportfree()
-#test.getconfig()
-#test.getversion()
-test.getmaclist()
-test.quit()
-
-
