@@ -7,10 +7,10 @@ import os
 import sys
 
 class dell3548:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 10
         self.expectData1 = [ 'User Name:.*', 'Password:.*', '[^n]> .*', 'asdfasdfasdf', 'One line: <return>.*', '[^n]# .*', '34234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("telnet %s" % (self.ip), timeout=self.timewait)
@@ -22,7 +22,7 @@ class dell3548:
             self.pexpect1.sendline(self.username)
             backData2 = self.pexpect1.expect(self.expectData1)
             if backData2 == 1:
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData3 = self.pexpect1.expect(self.expectData1)
                 if backData3 == 2:
                     self.pexpect1.sendline("enable")    
@@ -206,12 +206,12 @@ class dell3548:
         # print "AAAA",backUserData1,"AAAA"
     
 class ex:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\S+\@\S+>.*', '#.*', '---\(more[\ \d\%]*\)---.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\S+\@\S+>.*', '#.*', '---\(more[\ \d\%]*\)---.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
 
     def conn(self):
@@ -234,7 +234,7 @@ class ex:
             if backData1 == 1 or dir().count("backData12") == 1:
                 #print "GET PASSWROD PRMOMPT backData1 or backData12"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     print "LOGIN:OK",
@@ -521,10 +521,10 @@ class ex:
         # print "AAAA",backUserData1,"AAAA"
     
 class s16:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 10
         self.expectData1 = [ 'sername.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'ENTER.*', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("telnet %s" % (self.ip), timeout=self.timewait)
@@ -537,7 +537,7 @@ class s16:
             self.pexpect1.send('\r')
             backData2 = self.pexpect1.expect(self.expectData1)
             if backData2 == 1:
-                self.pexpect1.send(self.password)
+                self.pexpect1.send(self.assword)
                 self.pexpect1.send('\r')
                 backData3 = self.pexpect1.expect(self.expectData1)
                 if backData3 == 6:
@@ -741,13 +741,13 @@ class s16:
         # print "AAAA",backUserData1,"AAAA"
     
 class s2752:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
         self.version = ""
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
 
     def conn(self):
@@ -767,7 +767,7 @@ class s2752:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -945,12 +945,12 @@ class s2752:
     
 
 class s5148:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
 
     def conn(self):
@@ -970,7 +970,7 @@ class s5148:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -1150,12 +1150,12 @@ class s5148:
         # print "AAAA",backUserData1,"AAAA"
     
 class s5152:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -1174,7 +1174,7 @@ class s5152:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -1372,12 +1372,12 @@ class s5152:
         # print "AAAA",backUserData1,"AAAA"
 
 class s5124:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
 
     def conn(self):
@@ -1397,7 +1397,7 @@ class s5124:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -1602,12 +1602,12 @@ class s5124:
         # print "AAAA",backUserData1,"AAAA"
 
 class s5348:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -1626,7 +1626,7 @@ class s5348:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -1732,12 +1732,12 @@ class s5348:
         # print "AAAA",backUserData1,"AAAA"
 
 class s5352:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -1756,7 +1756,7 @@ class s5352:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -1990,12 +1990,12 @@ class s5352:
 
 
 class s5748:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -2014,7 +2014,7 @@ class s5748:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -2222,12 +2222,12 @@ class s5748:
 
 class s7506:
     # H3C S7506E
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
 
     def conn(self):
@@ -2247,7 +2247,7 @@ class s7506:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -2352,12 +2352,12 @@ class s7506:
         # print "AAAA",backUserData1,"AAAA"
 
 class  s7806:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -2376,7 +2376,7 @@ class  s7806:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -2476,12 +2476,12 @@ class  s7806:
         return 1
 
 class s5752:
-    def __init__(self, ip, username, password):
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -2500,7 +2500,7 @@ class s5752:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -2722,15 +2722,15 @@ class s5752:
         self.pexpect1.sendline("quit")
         backUserData1 = self.pexpect1.expect(self.expectData1)
         # print "AAAA",backUserData1,"AAAA"
-    
 
-class s9306:
-    def __init__(self, ip, username, password):
+class s6724:
+# Quidway S6700-24-EI
+    def __init__(self, ip, username, assword):
         self.ip = ip 
         self.username = username
-        self.password = password
+        self.assword = assword
         self.timewait = 20
-        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
         self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
     def conn(self):
         # print "START CONN"
@@ -2749,7 +2749,139 @@ class s9306:
             if backData1 == 1 or dir().count("backData12") == 1:
                 # print "GET PASSWROD PRMOMPT"
                 # print "SENDING PASSWORD"
-                self.pexpect1.sendline(self.password)
+                self.pexpect1.sendline(self.assword)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        #print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+            if linepart[0] == 'return':
+                break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x34\x32\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x34\x32\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def quit(self):
+        # print "QUIT"
+        self.pexpect1.sendline("quit")
+        backUserData1 = self.pexpect1.expect(self.expectData1)
+        # print "AAAA",backUserData1,"AAAA"
+
+#class s5728:
+    
+
+class s9306:
+    def __init__(self, ip, username, assword):
+        self.ip = ip 
+        self.username = username
+        self.assword = assword
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.assword)
                 backData2 = self.pexpect1.expect(self.expectData1)
                 if backData2 == 2:
                     # print "GET > PRMPT, WE ARE LOGIN"
@@ -2818,6 +2950,137 @@ class s9306:
             result = re.findall(r"\x1b\x5b\x34\x32\x44", line)
             if len(result) != 0:
                 line2 = line.replace('\x1b\x5b\x34\x32\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def quit(self):
+        # print "QUIT"
+        self.pexpect1.sendline("quit")
+        backUserData1 = self.pexpect1.expect(self.expectData1)
+        # print "AAAA",backUserData1,"AAAA"
+
+class s10508:
+    # H3C S7506E
+    def __init__(self, ip, username, assword):
+        self.ip = ip 
+        self.username = username
+        self.assword = assword
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'assword:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.assword)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+                if linepart[0] == 'return':
+                    break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x31\x36\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x31\x36\x44', "")
                 temphandle.write(line2)
             else:
                 temphandle.write(line)
