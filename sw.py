@@ -1587,8 +1587,138 @@ class s5124:
                 temphandle.write(line2)
             else:
                 temphandle.write(line)
-            filehandle.close()
-            temphandle.close()
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def quit(self):
+        # print "QUIT"
+        self.pexpect1.sendline("quit")
+        backUserData1 = self.pexpect1.expect(self.expectData1)
+        # print "AAAA",backUserData1,"AAAA"
+
+class s5348:
+    def __init__(self, ip, username, password):
+        self.ip = ip 
+        self.username = username
+        self.password = password
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.password)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        #print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+            if linepart[0] == 'return':
+                break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x34\x32\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x34\x32\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
         # os.remove(filename)
         shutil.copyfile(temp.name, filename)
         temp.close()
@@ -2090,6 +2220,261 @@ class s5748:
         # print "AAAA",backUserData1,"AAAA"
     
 
+class s7506:
+    # H3C S7506E
+    def __init__(self, ip, username, password):
+        self.ip = ip 
+        self.username = username
+        self.password = password
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.password)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+                if linepart[0] == 'return':
+                    break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x31\x36\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x31\x36\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def quit(self):
+        # print "QUIT"
+        self.pexpect1.sendline("quit")
+        backUserData1 = self.pexpect1.expect(self.expectData1)
+        # print "AAAA",backUserData1,"AAAA"
+
+class  s7806:
+    def __init__(self, ip, username, password):
+        self.ip = ip 
+        self.username = username
+        self.password = password
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.password)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        #print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+            if linepart[0] == 'return':
+                break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x31\x36\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x31\x36\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
 class s5752:
     def __init__(self, ip, username, password):
         self.ip = ip 
@@ -2275,6 +2660,137 @@ class s5752:
                             number += 1
         print self.ip, "PORT ETA: ", number
         return number
+
+    def formatfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        for line in open(filename):
+            # linepart = re.findall(r"([\(\)\#\`\=\&\"\!\^$\w\.\/\-]+)+",line)
+            linepart = re.findall(r"([\S]+)", line)
+            if len(linepart) == 0:
+                continue
+            if linepart[0] == 'return':
+                break
+            temphandle.write(' '.join(linepart))
+            temphandle.write('\n')
+        temphandle.close()
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfile(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"\x1b\x5b\x34\x32\x44", line)
+            if len(result) != 0:
+                line2 = line.replace('\x1b\x5b\x34\x32\x44', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def cleanfilemore(self, filename):
+        temp = tempfile.TemporaryFile()
+        temphandle = open(temp.name, 'w')
+        filehandle = open(filename, 'r')
+        for line in filehandle:
+            result = re.findall(r"---- More ----", line)
+            if len(result) != 0:
+                line2 = line.replace('---- More ----', "")
+                temphandle.write(line2)
+            else:
+                temphandle.write(line)
+        filehandle.close()
+        temphandle.close()
+        # os.remove(filename)
+        shutil.copyfile(temp.name, filename)
+        temp.close()
+        os.unlink(temp.name)
+        return 1
+
+    def quit(self):
+        # print "QUIT"
+        self.pexpect1.sendline("quit")
+        backUserData1 = self.pexpect1.expect(self.expectData1)
+        # print "AAAA",backUserData1,"AAAA"
+    
+
+class s9306:
+    def __init__(self, ip, username, password):
+        self.ip = ip 
+        self.username = username
+        self.password = password
+        self.timewait = 20
+        self.expectData1 = [ 'yes/no.*', 'password:.*', '\<[\w\-]+\>.*', '\[[\w\-]+\].*', '---- More ----.*', 'closed.*', 'asdf234234sdfsdf', 'asdfasdf234sdf', 'pexpect.EOF', 'pexect.TIMEOUT.' ]
+        self.pexpect1 = pexpect.spawn("ssh %s@%s" % (self.username, self.ip), timeout=self.timewait)
+    def conn(self):
+        # print "START CONN"
+        backData1 = self.pexpect1.expect(self.expectData1)
+        if backData1 == 0 or backData1 == 1:
+            if backData1 == 0:
+                # print "GET YES/NO"
+                self.pexpect1.sendline("yes")
+                backData12 = self.pexpect1.expect(self.expectData1)
+                if backData12 == 1:
+                    pass
+                else:
+                    print "Error"
+                    return 0
+#            if backData1 == 1 or (isset(backData12)):
+            if backData1 == 1 or dir().count("backData12") == 1:
+                # print "GET PASSWROD PRMOMPT"
+                # print "SENDING PASSWORD"
+                self.pexpect1.sendline(self.password)
+                backData2 = self.pexpect1.expect(self.expectData1)
+                if backData2 == 2:
+                    # print "GET > PRMPT, WE ARE LOGIN"
+                    return self.pexpect1
+                    time.sleep(5)
+        else:
+            print "Error"
+            return 0
+
+    def getconfig(self):
+        # print "START GETCONFIG"
+        type = "getconfig"
+        cmd = "display current-configuration"
+        self.exe(type, cmd)
+
+    def exe(self, type, cmd):
+        recvdata = ""
+        self.pexpect1.sendline("%s" % cmd)
+        while 1:
+            backUserData1 = self.pexpect1.expect(self.expectData1)
+            if backUserData1 == 2:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                break
+            elif backUserData1 == 4:
+                recvdata += self.pexpect1.before
+                recvdata += self.pexpect1.after
+                self.pexpect1.send(" ")
+            else:
+                print backUserData1
+                print "Error A"
+                return 0
+        resultfile = "./%s/%s.txt" % (type, self.ip)
+        resultfilehandle = open(resultfile, 'w')
+        resultfilehandle.write(recvdata)
+        resultfilehandle.close()
+        self.cleanfile(resultfile)
+        self.cleanfilemore(resultfile)
+        self.formatfile(resultfile)
+        #print "RESULT SAVED TO > %s" % resultfile
+        return resultfile
 
     def formatfile(self, filename):
         temp = tempfile.TemporaryFile()
